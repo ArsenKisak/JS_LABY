@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна робота №3</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .task-block { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        .result { margin-top: 10px; font-weight: bold; color: #333; }
+        input { margin-right: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Лабораторна робота №3</h1>
+
+    <div class="task-block">
+        <h3>Завдання 1. Виведення поточної дати</h3>
+        <button onclick="runTask1()">Виконати</button>
+        <div id="res1" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 2. Виведення дня тижня</h3>
+        <button onclick="runTask2()">Виконати</button>
+        <div id="res2" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 3. Дата N днів назад</h3>
+        <input type="number" id="daysAgo" placeholder="Кількість днів">
+        <button onclick="runTask3()">Виконати</button>
+        <div id="res3" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 4. Останній день місяця</h3>
+        <input type="number" id="yearInput" placeholder="Рік (напр. 2023)">
+        <input type="number" id="monthInput" placeholder="Місяць (1-12)">
+        <button onclick="runTask4()">Виконати</button>
+        <div id="res4" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 5. Секунди дня</h3>
+        <button onclick="runTask5()">Виконати</button>
+        <div id="res5" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 6. Формат ДД.ММ.РРРР</h3>
+        <input type="date" id="task6Date">
+        <button onclick="runTask6()">Виконати (або поточна дата)</button>
+        <div id="res6" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 7. Різниця між датами</h3>
+        <input type="date" id="date1">
+        <input type="date" id="date2">
+        <button onclick="runTask7()">Обчислити</button>
+        <div id="res7" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 8. Відносне форматування</h3>
+        <input type="number" id="task8Offset" placeholder="Скільки секунд назад?">
+        <button onclick="runTask8()">Виконати</button>
+        <div id="res8" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 9. Парсинг дати з рядка</h3>
+        <p><small>Підтримувані формати: РРРР-ММ-ДД (напр. 2023-10-15) або ДД.ММ.РРРР (напр. 15.10.2023)</small></p>
+        <input type="text" id="task9Input" placeholder="Введіть дату">
+        <button onclick="runTask9()">Виконати</button>
+        <div id="res9" class="result"></div>
+    </div>
+
+    <div class="task-block">
+        <h3>Завдання 10. Локалізований вивід</h3>
+        <input type="text" id="langCode" placeholder="Код мови (uk, ru, en)" value="uk">
+        <button onclick="runTask10()">Виконати</button>
+        <div id="res10" class="result"></div>
+    </div>
+
+    <script src="lab3_lib.js"></script>
+    <script src="lab3.js"></script>
+</body>
+</html>
