@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AutoRent — Оренда авто · Кісак А.А.</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f5f4f0; --card:#fff; --dark:#141414; --muted:#6b7280;
+  --border:#e5e5e0; --red:#d42b2b; --red2:#ff4444;
+  --green:#16a34a; --yellow:#d97706; --blue:#2563eb;
+  --shadow:0 2px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.14);
+  --r:14px; --font:'Unbounded',sans-serif; --body:'Nunito',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--dark);font-family:var(--body);font-size:15px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+img{display:block;max-width:100%;}
+button{font-family:var(--body);cursor:pointer;border:none;outline:none;}
+input,select,textarea{font-family:var(--body);outline:none;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:#d1d0ca;border-radius:3px;}
+
+/* ══ HEADER ══ */
+header{position:sticky;top:0;z-index:200;background:rgba(245,244,240,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.hdr{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font);font-size:1.15rem;font-weight:900;color:var(--dark);text-decoration:none;}
+.logo-dot{color:var(--red);}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.hdr-nav{display:flex;gap:2px;margin-left:16px;}
+.nav-btn{background:none;color:var(--muted);font-size:.85rem;font-weight:600;padding:7px 18px;border-radius:8px;transition:all .18s;}
+.nav-btn:hover{color:var(--dark);background:rgba(0,0,0,.05);}
+.nav-btn.on{color:var(--dark);background:rgba(0,0,0,.08);}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+
+/* ── Clock (BOM/setInterval) ── */
+.hdr-clock{
+  font-family:var(--font);font-size:.72rem;font-weight:700;
+  color:var(--dark);background:var(--card);
+  border:1px solid var(--border);padding:6px 13px;border-radius:8px;
+  white-space:nowrap;min-width:148px;text-align:center;
+}
+.hdr-badge{font-size:.7rem;font-weight:700;background:var(--dark);color:#fff;padding:5px 12px;border-radius:20px;font-family:var(--font);}
+
+/* ══ HERO ══ */
+.hero{background:var(--dark);position:relative;overflow:hidden;min-height:440px;display:flex;align-items:center;}
+.hero-photo{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80') center/cover no-repeat;opacity:.22;}
+.hero-inner{position:relative;max-width:1200px;margin:0 auto;padding:60px 24px;width:100%;}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;background:rgba(212,43,43,.18);border:1px solid rgba(212,43,43,.3);color:#ff7a7a;font-size:.7rem;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:20px;text-transform:uppercase;letter-spacing:.08em;font-family:var(--font);}
+.hero h1{font-family:var(--font);font-size:clamp(1.9rem,5vw,3.4rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:14px;}
+.hero h1 em{font-style:normal;color:var(--red2);}
+.hero-sub{color:rgba(255,255,255,.6);font-size:.98rem;max-width:500px;margin-bottom:28px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:32px;}
+.chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);font-size:.8rem;font-weight:600;padding:6px 14px;border-radius:20px;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{background:var(--red);color:#fff;font-weight:700;font-size:.9rem;padding:13px 28px;border-radius:10px;transition:all .18s;}
+.btn-primary:hover{background:#b52222;transform:translateY(-1px);}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;font-weight:700;font-size:.9rem;padding:13px 28px;border-radius:10px;border:1px solid rgba(255,255,255,.2);transition:all .18s;}
+.btn-ghost:hover{background:rgba(255,255,255,.16);}
+.hero-stats{display:flex;gap:32px;margin-top:44px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
+.hs-num{font-family:var(--font);font-size:1.7rem;font-weight:900;color:#fff;}
+.hs-lbl{font-size:.76rem;color:rgba(255,255,255,.5);}
+
+/* ══ MAIN ══ */
+main{max-width:1200px;margin:0 auto;padding:32px 24px 60px;flex:1;}
+.sec{display:none;}
+.sec.on{display:block;}
+
+/* ══ STATS ══ */
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:26px;}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);}
+.sc-lbl{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px;}
+.sc-val{font-family:var(--font);font-size:1.6rem;font-weight:900;color:var(--dark);}
+.sc-val.g{color:var(--green);}
+.sc-val.r{color:var(--red);}
+.sc-val.b{color:var(--blue);}
+
+/* ══ SEC HEADER ══ */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.sec-ttl{font-family:var(--font);font-size:1.05rem;font-weight:800;color:var(--dark);}
+.sec-sub{font-size:.8rem;color:var(--muted);margin-top:3px;}
+.qfilters{display:flex;gap:7px;flex-wrap:wrap;}
+.qf{background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:.78rem;font-weight:700;padding:7px 16px;border-radius:20px;transition:all .18s;}
+.qf:hover{border-color:var(--dark);color:var(--dark);}
+.qf.on{background:var(--dark);border-color:var(--dark);color:#fff;}
+
+/* ══ FILTER + SEARCH BAR ══ */
+.filter-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:22px;box-shadow:var(--shadow);}
+.fb-grp{display:flex;flex-direction:column;gap:5px;flex:1;min-width:130px;}
+.fb-lbl{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+.fb-sel{background:var(--bg);border:1px solid var(--border);color:var(--dark);font-size:.85rem;font-weight:600;padding:9px 12px;border-radius:9px;transition:border-color .18s;cursor:pointer;}
+.fb-sel:hover,.fb-sel:focus{border-color:var(--dark);}
+.fb-inp{background:var(--bg);border:1px solid var(--border);color:var(--dark);font-size:.85rem;font-weight:600;padding:9px 12px;border-radius:9px;transition:border-color .18s;width:100%;}
+.fb-inp:focus{border-color:var(--dark);}
+.fb-apply{align-self:flex-end;background:var(--dark);color:#fff;font-weight:700;font-size:.86rem;padding:10px 20px;border-radius:9px;transition:opacity .18s;white-space:nowrap;}
+.fb-apply:hover{opacity:.8;}
+
+/* ══ CARS GRID ══ */
+.cars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.no-cars{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-size:.95rem;}
+
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .22s,box-shadow .22s,border-color .2s;box-shadow:var(--shadow);cursor:pointer;}
+.ccard:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:#ccc;}
+.ccard-img{position:relative;height:195px;overflow:hidden;background:#e5e5e0;}
+.ccard-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.ccard:hover .ccard-img img{transform:scale(1.05);}
+.ccard-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.52) 100%);}
+.tag{position:absolute;top:11px;left:11px;z-index:1;font-size:.64rem;font-weight:800;padding:4px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:.06em;}
+.tag-eco{background:rgba(22,163,74,.15);color:#16a34a;border:1px solid rgba(22,163,74,.25);}
+.tag-lux{background:rgba(217,119,6,.15);color:#d97706;border:1px solid rgba(217,119,6,.25);}
+.tag-trk{background:rgba(37,99,235,.15);color:#2563eb;border:1px solid rgba(37,99,235,.25);}
+.avail-badge{position:absolute;top:11px;right:11px;z-index:1;font-size:.64rem;font-weight:800;padding:4px 10px;border-radius:6px;text-transform:uppercase;}
+.ab-free{background:rgba(22,163,74,.9);color:#fff;}
+.ab-busy{background:rgba(212,43,43,.9);color:#fff;}
+.price-corner{position:absolute;bottom:11px;right:11px;z-index:1;text-align:right;}
+.price-big{font-family:var(--font);font-size:1.2rem;font-weight:900;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.5);}
+.price-sm{font-size:.67rem;color:rgba(255,255,255,.75);}
+.fav-btn{position:absolute;bottom:11px;left:11px;z-index:2;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.4);border:none;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .18s;backdrop-filter:blur(4px);}
+.fav-btn:hover{background:rgba(212,43,43,.7);}
+.fav-btn.active{background:var(--red);}
+
+.ccard-body{padding:16px 16px 13px;}
+.ccard-model{font-family:var(--font);font-size:.98rem;font-weight:800;color:var(--dark);margin-bottom:2px;}
+.ccard-sub{font-size:.77rem;color:var(--muted);}
+.specs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.sp{display:flex;align-items:center;gap:5px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:.73rem;font-weight:600;color:var(--muted);}
+.ccard-div{height:1px;background:var(--border);margin:10px 0;}
+.ccard-footer{display:flex;gap:7px;}
+.btn-rent{flex:1;background:var(--dark);color:#fff;font-weight:700;font-size:.82rem;padding:10px;border-radius:8px;transition:all .18s;}
+.btn-rent:hover{background:var(--red);}
+.btn-ret{flex:1;background:none;border:1px solid var(--border);color:var(--red);font-weight:700;font-size:.82rem;padding:10px;border-radius:8px;transition:all .18s;}
+.btn-ret:hover{background:rgba(212,43,43,.06);border-color:var(--red);}
+
+/* ══ FAVOURITES ══ */
+.fav-strip{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow);display:none;}
+.fav-strip.vis{display:block;}
+.fav-ttl{font-family:var(--font);font-size:.8rem;font-weight:800;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.fav-list{display:flex;flex-wrap:wrap;gap:8px;}
+.fav-tag{display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.82rem;font-weight:600;color:var(--dark);}
+.fav-remove{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;line-height:1;padding:0 2px;transition:color .15s;}
+.fav-remove:hover{color:var(--red);}
+
+/* ══ RENT PAGE ══ */
+.rent-grid{display:grid;grid-template-columns:360px 1fr;gap:22px;align-items:start;}
+@media(max-width:800px){.rent-grid{grid-template-columns:1fr;}}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);position:sticky;top:76px;}
+.form-card-hdr{background:var(--dark);padding:20px 22px 16px;}
+.form-card-ttl{font-family:var(--font);font-size:.92rem;font-weight:800;color:#fff;}
+.form-card-sub{font-size:.77rem;color:rgba(255,255,255,.5);margin-top:3px;}
+.form-card-body{padding:20px;}
+.fg{margin-bottom:14px;}
+.flbl{display:block;font-size:.69rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px;}
+.finp{width:100%;padding:10px 13px;background:var(--bg);border:1px solid var(--border);color:var(--dark);font-size:.88rem;font-weight:600;border-radius:10px;transition:border-color .18s;}
+.finp:focus{border-color:var(--dark);}
+.finp.err{border-color:var(--red);}
+.finp::placeholder{color:#bbb;font-weight:400;}
+.field-err{font-size:.72rem;color:var(--red);margin-top:4px;display:none;}
+.field-err.vis{display:block;}
+.price-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin:14px 0;}
+.pb-lbl{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px;}
+.pb-val{font-family:var(--font);font-size:1.9rem;font-weight:900;color:var(--red);}
+.pb-note{font-size:.73rem;color:var(--muted);margin-top:4px;}
+.btn-sub{width:100%;background:var(--dark);color:#fff;font-weight:800;font-size:.88rem;padding:13px;border-radius:10px;transition:all .18s;letter-spacing:.02em;}
+.btn-sub:hover{background:var(--red);}
+.pick-ttl{font-family:var(--font);font-size:.92rem;font-weight:800;color:var(--dark);margin-bottom:13px;}
+.pick-list{display:flex;flex-direction:column;gap:9px;}
+.pick-item{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;align-items:stretch;transition:all .18s;box-shadow:var(--shadow);}
+.pick-item:hover{border-color:#aaa;}
+.pick-item.chosen{border-color:var(--dark);box-shadow:0 0 0 3px rgba(20,20,20,.12);}
+.pick-item.na{opacity:.4;cursor:not-allowed;pointer-events:none;}
+.pick-thumb{width:108px;flex-shrink:0;}
+.pick-thumb img{width:100%;height:100%;object-fit:cover;}
+.pick-info{padding:11px 13px;flex:1;}
+.pick-model{font-weight:800;font-size:.88rem;color:var(--dark);margin-bottom:2px;}
+.pick-meta{font-size:.73rem;color:var(--muted);}
+.pick-price{font-family:var(--font);font-size:.93rem;font-weight:900;color:var(--red);margin-top:5px;}
+
+/* ══ HISTORY ══ */
+.tbl-wrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:.85rem;}
+thead th{background:var(--dark);color:rgba(255,255,255,.7);text-align:left;padding:12px 15px;font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--bg);}
+tbody td{padding:12px 15px;color:var(--dark);}
+.td-bold{font-weight:700;}
+.td-muted{color:var(--muted);font-size:.81rem;}
+.td-green{font-weight:800;color:var(--green);}
+.td-chip{display:inline-block;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:5px;text-transform:uppercase;}
+.chip-eco{background:rgba(22,163,74,.12);color:var(--green);}
+.chip-lux{background:rgba(217,119,6,.12);color:var(--yellow);}
+.chip-trk{background:rgba(37,99,235,.1);color:var(--blue);}
+.empty-msg td{text-align:center;padding:48px;color:var(--muted);}
+
+/* stats summary row */
+.stats-summary{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-top:18px;display:flex;flex-wrap:wrap;gap:24px;}
+.ss-item{font-size:.85rem;color:var(--dark);}
+.ss-item strong{font-family:var(--font);font-weight:900;}
+
+/* ══ ABOUT (Navigator) ══ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.about-grid{grid-template-columns:1fr;}}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);}
+.info-card h3{font-family:var(--font);font-size:.85rem;font-weight:800;color:var(--dark);margin-bottom:14px;}
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:.83rem;gap:12px;}
+.info-row:last-child{border-bottom:none;}
+.info-key{color:var(--muted);font-weight:600;flex-shrink:0;}
+.info-val{color:var(--dark);font-weight:700;text-align:right;word-break:break-all;}
+
+/* ══ MODALS ══ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);backdrop-filter:blur(4px);z-index:400;align-items:center;justify-content:center;padding:16px;}
+.overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid #ddd;border-radius:var(--r);width:100%;max-width:440px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.28);animation:popIn .2s ease;}
+.modal.wide{max-width:580px;}
+@keyframes popIn{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border-bottom:1px solid var(--border);}
+.modal-ttl{font-family:var(--font);font-size:.92rem;font-weight:800;color:var(--dark);}
+.modal-x{background:none;border:none;font-size:1.1rem;color:var(--muted);cursor:pointer;padding:4px;line-height:1;}
+.modal-x:hover{color:var(--dark);}
+.modal-bd{padding:20px;}
+
+/* detail modal */
+.detail-img{width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:16px;}
+.detail-title{font-family:var(--font);font-size:1.1rem;font-weight:900;color:var(--dark);margin-bottom:4px;}
+.detail-sub{font-size:.82rem;color:var(--muted);margin-bottom:14px;}
+.detail-specs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;}
+.detail-desc{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:18px;}
+.detail-price-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px 16px;margin-bottom:14px;}
+.detail-price-lbl{font-size:.75rem;color:var(--muted);font-weight:600;}
+.detail-price-val{font-family:var(--font);font-size:1.5rem;font-weight:900;color:var(--red);}
+
+/* return modal */
+.modal-car{display:flex;gap:13px;align-items:center;margin-bottom:16px;}
+.modal-thumb{width:88px;height:62px;border-radius:8px;overflow:hidden;flex-shrink:0;border:1px solid var(--border);}
+.modal-thumb img{width:100%;height:100%;object-fit:cover;}
+.modal-name{font-weight:800;font-size:.93rem;color:var(--dark);}
+.modal-id{font-size:.74rem;color:var(--muted);margin-top:2px;}
+.modal-warn{background:rgba(212,43,43,.06);border:1px solid rgba(212,43,43,.18);border-radius:9px;padding:12px 14px;font-size:.82rem;color:var(--muted);margin-bottom:16px;line-height:1.55;}
+
+/* ══ THEME TOGGLE ══ */
+.theme-btn{background:var(--card);border:1px solid var(--border);color:var(--dark);font-size:.85rem;padding:6px 13px;border-radius:8px;transition:all .18s;}
+.theme-btn:hover{border-color:var(--dark);}
+body.dark{--bg:#111;--card:#1a1a1a;--dark:#f0f0f0;--muted:#888;--border:#2a2a2a;}
+body.dark header{background:rgba(17,17,17,.96);}
+body.dark .hero-photo{opacity:.15;}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;font-size:.83rem;font-weight:600;padding:13px 18px;border-radius:10px;max-width:320px;transform:translateY(60px);opacity:0;transition:all .26s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.ok{background:#16a34a;color:#fff;box-shadow:0 8px 24px rgba(22,163,74,.3);}
+.toast.err{background:var(--red);color:#fff;box-shadow:0 8px 24px rgba(212,43,43,.3);}
+
+/* ══ FOOTER ══ */
+footer{background:var(--dark);color:rgba(255,255,255,.5);font-size:.83rem;margin-top:auto;}
+.footer-inner{max-width:1200px;margin:0 auto;padding:44px 24px 28px;}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08);}
+@media(max-width:860px){.footer-top{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.footer-top{grid-template-columns:1fr;}}
+.ft-logo{display:flex;align-items:center;gap:10px;font-family:var(--font);font-size:1.05rem;font-weight:900;color:#fff;text-decoration:none;margin-bottom:12px;}
+.ft-logo-icon{width:32px;height:32px;border-radius:8px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+.ft-logo-dot{color:#ff6b6b;}
+.ft-desc{font-size:.8rem;line-height:1.6;color:rgba(255,255,255,.38);max-width:220px;}
+.ft-contacts{margin-top:14px;display:flex;flex-direction:column;gap:6px;}
+.ft-contact{display:flex;align-items:center;gap:8px;font-size:.8rem;color:rgba(255,255,255,.5);}
+.ft-col-ttl{font-family:var(--font);font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.28);margin-bottom:13px;}
+.ft-links{display:flex;flex-direction:column;gap:8px;}
+.ft-link{color:rgba(255,255,255,.48);font-size:.82rem;font-weight:600;background:none;border:none;cursor:pointer;text-align:left;padding:0;transition:color .15s;font-family:var(--body);}
+.ft-link:hover{color:#fff;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;padding-top:22px;}
+.ft-copy{font-size:.76rem;color:rgba(255,255,255,.26);}
+.ft-student{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:10px 16px;}
+.ft-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--red),#ff6b35);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.ft-sname{font-family:var(--font);font-size:.76rem;font-weight:800;color:#fff;}
+.ft-sinfo{font-size:.7rem;color:rgba(255,255,255,.32);margin-top:2px;}
+.btn-top{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);font-size:.76rem;font-weight:700;padding:7px 14px;border-radius:7px;transition:all .18s;display:flex;align-items:center;gap:6px;font-family:var(--font);}
+.btn-top:hover{background:rgba(255,255,255,.13);color:#fff;}
+
+@media(max-width:600px){.hdr-nav{display:none;}.cars-grid{grid-template-columns:1fr;}.hero h1{font-size:1.75rem;}}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+  <div class="hdr">
+    <a class="logo" href="#" onclick="goTo('cars');return false;">
+      <div class="logo-icon">🚗</div>Auto<span class="logo-dot">Rent</span>
+    </a>
+    <nav class="hdr-nav">
+      <button class="nav-btn on"  onclick="goTo('cars',this)">Каталог</button>
+      <button class="nav-btn"     onclick="goTo('rent',this)">Оренда</button>
+      <button class="nav-btn"     onclick="goTo('history',this)">Журнал</button>
+      <button class="nav-btn"     onclick="goTo('favourites',this)">Вибране ❤️ <span id="fav-cnt"></span></button>
+      <button class="nav-btn"     onclick="goTo('about',this)">Про додаток</button>
+    </nav>
+    <div class="hdr-right">
+      <!-- BOM: setInterval clock -->
+      <div class="hdr-clock" id="hdr-clock">--.--.---- --:--:--</div>
+      <button class="theme-btn" onclick="toggleTheme()" title="Змінити тему">🌙</button>
+      <div class="hdr-badge">Курсова · ООП · 2026</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero" id="top">
+  <div class="hero-photo"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker">🔥 Кращі умови в місті</div>
+    <h1>Оренда авто<br><em>без зайвого клопоту</em></h1>
+    <p class="hero-sub">Легкові авто та вантажівки на будь-який смак. Без застави, зі страховкою та безкоштовною подачею.</p>
+    <div class="hero-chips">
+      <span class="chip">✅ Без застави</span>
+      <span class="chip">🛡 Страховка включена</span>
+      <span class="chip">🚚 Подача безкоштовна</span>
+      <span class="chip">⚡ Оформлення 5 хв</span>
+    </div>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="goTo('cars')">Переглянути каталог →</button>
+      <button class="btn-ghost"   onclick="goTo('rent')">Орендувати зараз</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hs-num" id="hs-total">0</div><div class="hs-lbl">Авто в парку</div></div>
+      <div><div class="hs-num" id="hs-free">0</div><div class="hs-lbl">Вільних зараз</div></div>
+      <div><div class="hs-num">24/7</div><div class="hs-lbl">Підтримка</div></div>
+      <div><div class="hs-num">5★</div><div class="hs-lbl">Рейтинг</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN ══════════ -->
+<main>
+
+  <!-- ═══ КАТАЛОГ ═══ -->
+  <section id="sec-cars" class="sec on">
+    <div class="stats-strip">
+      <div class="sc"><div class="sc-lbl">Всього авто</div><div class="sc-val"   id="s-total">0</div></div>
+      <div class="sc"><div class="sc-lbl">Вільних</div>    <div class="sc-val g" id="s-free">0</div></div>
+      <div class="sc"><div class="sc-lbl">Орендовано</div> <div class="sc-val r" id="s-busy">0</div></div>
+      <div class="sc"><div class="sc-lbl">Оренд</div>      <div class="sc-val b" id="s-rents">0</div></div>
+      <div class="sc"><div class="sc-lbl">Дохід, грн</div> <div class="sc-val"   id="s-rev">0</div></div>
+    </div>
+
+    <!-- FILTER + SEARCH BAR (events: change, input) -->
+    <div class="filter-bar">
+      <div class="fb-grp">
+        <span class="fb-lbl">🔍 Пошук</span>
+        <!-- event: input -->
+        <input class="fb-inp" id="search-inp" type="text" placeholder="Введіть марку авто..." oninput="liveSearch()"/>
+      </div>
+      <div class="fb-grp">
+        <span class="fb-lbl">Клас</span>
+        <!-- event: change -->
+        <select class="fb-sel" id="f-type" onchange="applyFilters()">
+          <option value="">Всі класи</option>
+          <option value="economy">Economy</option>
+          <option value="luxury">Luxury</option>
+          <option value="truck">Truck</option>
+        </select>
+      </div>
+      <div class="fb-grp">
+        <span class="fb-lbl">Доступність</span>
+        <select class="fb-sel" id="f-avail" onchange="applyFilters()">
+          <option value="">Всі авто</option>
+          <option value="free">Тільки вільні</option>
+        </select>
+      </div>
+      <div class="fb-grp">
+        <span class="fb-lbl">Сортування</span>
+        <select class="fb-sel" id="f-sort" onchange="applyFilters()">
+          <option value="">За замовчуванням</option>
+          <option value="asc">Ціна ↑</option>
+          <option value="desc">Ціна ↓</option>
+          <option value="year">Рік (новіші)</option>
+        </select>
+      </div>
+      <button class="fb-apply" onclick="applyFilters()">Знайти</button>
+    </div>
+
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-ttl">Каталог автомобілів</div>
+        <div class="sec-sub" id="cars-count">Завантаження...</div>
+      </div>
+      <div class="qfilters">
+        <button class="qf on" onclick="qFilter('all',this)">Всі</button>
+        <button class="qf"    onclick="qFilter('economy',this)">Economy</button>
+        <button class="qf"    onclick="qFilter('luxury',this)">Luxury</button>
+        <button class="qf"    onclick="qFilter('truck',this)">Truck</button>
+        <button class="qf"    onclick="qFilter('free',this)">Вільні</button>
+      </div>
+    </div>
+
+    <!-- Вибране (делегування подій) -->
+    <div class="fav-strip" id="fav-strip">
+      <div class="fav-ttl">
+        <span>❤️ Вибране</span>
+        <button class="qf" onclick="clearFavs()">Очистити все</button>
+      </div>
+      <div class="fav-list" id="fav-list"></div>
+    </div>
+
+    <!-- event delegation container -->
+    <div class="cars-grid" id="cars-grid"></div>
+  </section>
+
+  <!-- ═══ ОРЕНДА ═══ -->
+  <section id="sec-rent" class="sec">
+    <div class="sec-hdr">
+      <div><div class="sec-ttl">Оформити оренду</div><div class="sec-sub">Заповніть форму та оберіть авто праворуч</div></div>
+    </div>
+    <div class="rent-grid">
+      <div class="form-card">
+        <div class="form-card-hdr">
+          <div class="form-card-ttl">Дані клієнта</div>
+          <div class="form-card-sub">Інформація зберігається локально</div>
+        </div>
+        <div class="form-card-body">
+          <!-- form with preventDefault + validation -->
+          <form id="rent-form" onsubmit="doRent(event)" novalidate>
+            <div class="fg">
+              <label class="flbl">Ім'я та прізвище</label>
+              <input class="finp" id="r-name" type="text" placeholder="Іван Петренко"/>
+              <div class="field-err" id="err-name">Введіть ім'я та прізвище</div>
+            </div>
+            <div class="fg">
+              <label class="flbl">Номер телефону</label>
+              <!-- event: input для live-валідації -->
+              <input class="finp" id="r-phone" type="text" placeholder="+380 99 000 00 00" oninput="validatePhone(this)"/>
+              <div class="field-err" id="err-phone">Невірний формат. Приклад: +380991234567</div>
+            </div>
+            <div class="fg">
+              <label class="flbl">Email</label>
+              <input class="finp" id="r-email" type="email" placeholder="ivan@example.com"/>
+              <div class="field-err" id="err-email">Введіть коректний email</div>
+            </div>
+            <div class="fg">
+              <label class="flbl">Кількість днів</label>
+              <input class="finp" id="r-days" type="number" min="1" max="30" value="3" oninput="calcPrice()"/>
+            </div>
+            <div class="price-box">
+              <div class="pb-lbl">Попередня вартість</div>
+              <div class="pb-val" id="pb-val">— грн</div>
+              <div class="pb-note" id="pb-note">Оберіть автомобіль зі списку праворуч</div>
+            </div>
+            <!-- event: submit -->
+            <button class="btn-sub" type="submit">Підтвердити бронювання →</button>
+          </form>
+        </div>
+      </div>
+      <div>
+        <div class="pick-ttl">Оберіть автомобіль</div>
+        <div class="pick-list" id="pick-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ЖУРНАЛ ═══ -->
+  <section id="sec-history" class="sec">
+    <div class="sec-hdr">
+      <div><div class="sec-ttl">Журнал оренд</div><div class="sec-sub" id="hist-sub">Всі транзакції</div></div>
+      <button class="qf" onclick="renderHistory()">↻ Оновити</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Автомобіль</th><th>Клас</th><th>Клієнт</th><th>Телефон</th><th>Днів</th><th>Сума</th><th>Дата</th></tr></thead>
+        <tbody id="hist-body"></tbody>
+      </table>
+    </div>
+    <!-- Advanced stats: reduce() + map() -->
+    <div class="stats-summary" id="stats-summary" style="display:none"></div>
+  </section>
+
+  <!-- ═══ ВИБРАНЕ ═══ -->
+  <section id="sec-favourites" class="sec">
+    <div class="sec-hdr">
+      <div><div class="sec-ttl">Вибране ❤️</div><div class="sec-sub" id="fav-page-sub">Ваші обрані автомобілі</div></div>
+      <button class="qf" onclick="clearFavs()">Очистити все</button>
+    </div>
+    <div class="cars-grid" id="fav-grid"></div>
+  </section>
+
+  <!-- ═══ ПРО ДОДАТОК (Navigator) ═══ -->
+  <section id="sec-about" class="sec">
+    <div class="sec-hdr"><div class="sec-ttl">Про додаток</div></div>
+    <div class="about-grid">
+      <div class="info-card">
+        <h3>🌐 Інформація про браузер (BOM Navigator)</h3>
+        <div id="nav-info"></div>
+      </div>
+      <div class="info-card">
+        <h3>📱 Інформація про екран (BOM Screen)</h3>
+        <div id="screen-info"></div>
+      </div>
+      <div class="info-card">
+        <h3>🛠 Технічний стек</h3>
+        <div>
+          <div class="info-row"><span class="info-key">Мова</span><span class="info-val">JavaScript ES6+ (ООП)</span></div>
+          <div class="info-row"><span class="info-key">Підхід</span><span class="info-val">SPA (Single Page Application)</span></div>
+          <div class="info-row"><span class="info-key">Класи</span><span class="info-val">Car → EconomyCar, LuxuryCar, TruckCar</span></div>
+          <div class="info-row"><span class="info-key">Зберігання</span><span class="info-val">localStorage (JSON)</span></div>
+          <div class="info-row"><span class="info-key">DOM API</span><span class="info-val">createElement, insertAdjacentHTML</span></div>
+          <div class="info-row"><span class="info-key">Методи масивів</span><span class="info-val">filter, map, reduce, forEach, includes</span></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <h3>🎓 Автор</h3>
+        <div>
+          <div class="info-row"><span class="info-key">ПІБ</span><span class="info-val">Кісак Арсен Андрійович</span></div>
+          <div class="info-row"><span class="info-key">Група</span><span class="info-val">ІП-25-3</span></div>
+          <div class="info-row"><span class="info-key">ВНЗ</span><span class="info-val">ІФНТУНГ</span></div>
+          <div class="info-row"><span class="info-key">Дисципліна</span><span class="info-val">Основи скриптового програмування</span></div>
+          <div class="info-row"><span class="info-key">Рік</span><span class="info-val">2026</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ MODAL: Деталі авто ═══ -->
+<div class="overlay" id="detail-overlay">
+  <div class="modal wide">
+    <div class="modal-hdr">
+      <span class="modal-ttl" id="dm-title">Інформація про авто</span>
+      <button class="modal-x" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="modal-bd">
+      <img class="detail-img" id="dm-img" src="" alt=""/>
+      <div class="detail-title" id="dm-name"></div>
+      <div class="detail-sub"  id="dm-sub"></div>
+      <div class="detail-specs" id="dm-specs"></div>
+      <p class="detail-desc" id="dm-desc"></p>
+      <div class="detail-price-row">
+        <div><div class="detail-price-lbl">Вартість за добу</div><div class="detail-price-val" id="dm-price"></div></div>
+        <button class="btn-sub" style="width:auto;padding:10px 22px" id="dm-rent-btn">Орендувати</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Повернення ═══ -->
+<div class="overlay" id="ret-overlay">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span class="modal-ttl">Повернення авто</span>
+      <button class="modal-x" onclick="closeRet()">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="modal-car">
+        <div class="modal-thumb"><img id="ret-img" src="" alt=""/></div>
+        <div><div class="modal-name" id="ret-name">—</div><div class="modal-id" id="ret-id">—</div></div>
+      </div>
+      <div class="modal-warn">Підтвердіть повернення авто в парк. Після підтвердження воно знову стане доступним для оренди.</div>
+      <button class="btn-sub" onclick="confirmRet()">✅ Підтвердити повернення</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <a class="ft-logo" href="#top" onclick="scrollTop()">
+          <div class="ft-logo-icon">🚗</div>Auto<span class="ft-logo-dot">Rent</span>
+        </a>
+        <p class="ft-desc">Сервіс оренди автомобілів. Курсова робота з основ скриптового програмування, ІФНТУНГ 2026.</p>
+        <div class="ft-contacts">
+          <div class="ft-contact"><span>📞</span><span>0800 123 456</span></div>
+          <div class="ft-contact"><span>📧</span><span>autorent@example.com</span></div>
+          <div class="ft-contact"><span>📍</span><span>м. Івано-Франківськ</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="ft-col-ttl">Навігація</div>
+        <div class="ft-links">
+          <button class="ft-link" onclick="goTo('cars')">🚗 Каталог авто</button>
+          <button class="ft-link" onclick="goTo('rent')">📋 Оформити оренду</button>
+          <button class="ft-link" onclick="goTo('history')">📊 Журнал оренд</button>
+          <button class="ft-link" onclick="goTo('favourites')">❤️ Вибране</button>
+          <button class="ft-link" onclick="goTo('about')">ℹ️ Про додаток</button>
+        </div>
+      </div>
+      <div>
+        <div class="ft-col-ttl">Класи авто</div>
+        <div class="ft-links">
+          <button class="ft-link" onclick="goTo('cars');setTimeout(()=>qFilter('economy',document.querySelectorAll('.qf')[1]),80)">🟢 Economy — від 1 200 грн</button>
+          <button class="ft-link" onclick="goTo('cars');setTimeout(()=>qFilter('luxury',document.querySelectorAll('.qf')[2]),80)">🟡 Luxury — від 2 500 грн</button>
+          <button class="ft-link" onclick="goTo('cars');setTimeout(()=>qFilter('truck',document.querySelectorAll('.qf')[3]),80)">🔵 Truck — від 4 000 грн</button>
+        </div>
+      </div>
+      <div>
+        <div class="ft-col-ttl">Умови</div>
+        <div class="ft-links">
+          <span class="ft-link" style="cursor:default">✅ Без застави</span>
+          <span class="ft-link" style="cursor:default">🛡 Страховка включена</span>
+          <span class="ft-link" style="cursor:default">⚡ Economy −10% від 7 днів</span>
+          <span class="ft-link" style="cursor:default">📄 Потрібне посвідчення</span>
+          <span class="ft-link" style="cursor:default">🔞 Вік від 21 року</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="ft-copy">© 2026 AutoRent. Курсова робота з ООП. Всі права захищено.</p>
+      <div class="ft-student">
+        <div class="ft-avatar">👨‍💻</div>
+        <div>
+          <div class="ft-sname">Кісак Арсен Андрійович</div>
+          <div class="ft-sinfo">ІП-25-3 · ІФНТУНГ · 2026</div>
+        </div>
+      </div>
+      <button class="btn-top" onclick="scrollTop()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+        Нагору
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+  JS: OOP CLASSES + DOM + BOM + LocalStorage
+══════════════════════════════════════════════ -->
+<script>
+"use strict";
+
+/* ════════════════════════════
+   OOP CLASSES (Inheritance + Polymorphism + Encapsulation)
+════════════════════════════ */
+class Car {
+  constructor(id, model, year, pricePerDay, photo, fuel, transmission, seats, description) {
+    this._id           = id;
+    this._model        = model;
+    this._year         = year;
+    this._pricePerDay  = pricePerDay;
+    this._photo        = photo;
+    this._fuel         = fuel;
+    this._transmission = transmission;
+    this._seats        = seats;
+    this._description  = description || "Надійний автомобіль у відмінному стані.";
+    this._isAvailable  = true;
+    this._rentedBy     = null;
+  }
+  get id()           { return this._id; }
+  get model()        { return this._model; }
+  get year()         { return this._year; }
+  get pricePerDay()  { return this._pricePerDay; }
+  get photo()        { return this._photo; }
+  get fuel()         { return this._fuel; }
+  get transmission() { return this._transmission; }
+  get seats()        { return this._seats; }
+  get description()  { return this._description; }
+  get isAvailable()  { return this._isAvailable; }
+  get rentedBy()     { return this._rentedBy; }
+
+  rentTo(name) {
+    if (!this._isAvailable) throw new Error("Авто вже орендоване");
+    this._isAvailable = false;
+    this._rentedBy = name;
+  }
+  returnCar() { this._isAvailable = true; this._rentedBy = null; }
+
+  // Polymorphism — overridden in subclasses
+  calculatePrice(days) { return this._pricePerDay * days; }
+  getType()     { return "standard"; }
+  getTypeName() { return "Стандарт"; }
+  getPriceNote(days) { return `${this._pricePerDay.toLocaleString("uk-UA")} грн × ${days} дн.`; }
+}
+
+class EconomyCar extends Car {
+  constructor(...args) { super(...args); this._discountFrom = 7; }
+  calculatePrice(days) {
+    const base = this._pricePerDay * days;
+    return days >= this._discountFrom ? Math.round(base * 0.9) : base;
+  }
+  getType()     { return "economy"; }
+  getTypeName() { return "Economy"; }
+  getPriceNote(days) {
+    return days >= this._discountFrom
+      ? `✅ Знижка 10% (від 7 днів) → ${this.calculatePrice(days).toLocaleString("uk-UA")} грн`
+      : `${this._pricePerDay.toLocaleString("uk-UA")} грн × ${days} дн. (від 7 днів −10%)`;
+  }
+}
+
+class LuxuryCar extends Car {
+  constructor(...args) { super(...args); this._ins = 0.15; }
+  calculatePrice(days) { return Math.round(this._pricePerDay * days * (1 + this._ins)); }
+  getType()     { return "luxury"; }
+  getTypeName() { return "Luxury"; }
+  getPriceNote(days) { return `🛡 Страховка +15% → ${this.calculatePrice(days).toLocaleString("uk-UA")} грн`; }
+}
+
+class TruckCar extends Car {
+  constructor(id, model, year, p, photo, fuel, tr, seats, desc, cargo) {
+    super(id, model, year, p, photo, fuel, tr, seats, desc);
+    this._cargo = cargo;
+  }
+  get cargo() { return this._cargo; }
+  calculatePrice(days) { return Math.round(this._pricePerDay * days * 1.05); }
+  getType()     { return "truck"; }
+  getTypeName() { return "Truck"; }
+  getPriceNote(days) { return `🚛 Вантажний +5% → ${this.calculatePrice(days).toLocaleString("uk-UA")} грн`; }
+}
+
+class Customer {
+  constructor(name, phone, email) {
+    this._name = name; this._phone = phone; this._email = email;
+  }
+  get name()  { return this._name; }
+  get phone() { return this._phone; }
+  get email() { return this._email; }
+}
+
+class RentalSystem {
+  constructor() { this._fleet = []; this._log = []; }
+  add(car)        { this._fleet.push(car); }
+  find(id)        { return this._fleet.find(c => c.id === id) || null; }
+  all(type, free) {
+    let r = this._fleet;
+    if (type) r = r.filter(c => c.getType() === type);
+    if (free) r = r.filter(c => c.isAvailable);
+    return r;
+  }
+  rent(carId, customer, days) {
+    const car = this.find(carId);
+    if (!car)             return { ok: false, msg: "Авто не знайдено" };
+    if (!car.isAvailable) return { ok: false, msg: "Це авто вже орендоване" };
+    if (days < 1)         return { ok: false, msg: "Мінімум 1 день" };
+    const price = car.calculatePrice(days);
+    car.rentTo(customer.name);
+    const rec = {
+      n: this._log.length + 1, carId,
+      model: car.model, type: car.getTypeName(), photo: car.photo,
+      customer: { name: customer.name, phone: customer.phone, email: customer.email },
+      days, price, date: new Date().toLocaleString("uk-UA")
+    };
+    this._log.push(rec);
+    return { ok: true, msg: `${car.model} успішно заброньовано!`, price };
+  }
+  returnCar(carId) {
+    const car = this.find(carId);
+    if (!car)              return { ok: false, msg: "Не знайдено" };
+    if (car.isAvailable)   return { ok: false, msg: "Авто не орендоване" };
+    car.returnCar();
+    return { ok: true, msg: `${car.model} повернуто в парк` };
+  }
+  stats() {
+    const total = this._fleet.length;
+    const free  = this._fleet.filter(c => c.isAvailable).length;
+    // Advanced logic: reduce() for revenue
+    const rev = this._log.reduce((sum, r) => sum + r.price, 0);
+    return { total, free, busy: total - free, rents: this._log.length, rev };
+  }
+  get log() { return this._log; }
+}
+
+/* ════════════════════
+   DATA — масив об'єктів (мінімум 5 властивостей кожен)
+════════════════════ */
+const S = new RentalSystem();
+
+S.add(new EconomyCar("E1","Volkswagen Polo",2022,1500,
+  "https://i.pinimg.com/1200x/b8/90/51/b89051f64ffd1f9d353fb07edd6e70c5.jpg",
+  "Бензин","АКПП",5,"Компактний міський хетчбек. Економний двигун 1.0 TSI 95 к.с., ідеальний для міста та подорожей."));
+S.add(new EconomyCar("E2","Renault Megane",2021,1200,
+  "https://i.pinimg.com/1200x/9c/ee/ae/9ceeae911884cba5c0c58f5fd1b3f9a3.jpg",
+  "Бензин","МКПП",5,"Просторий комфортний седан. Двигун 1.5 dCi, витрата 5.5 л/100 км. Повний набір опцій."));
+S.add(new EconomyCar("E3","Skoda Octavia",2023,1300,
+  "https://i.pinimg.com/1200x/51/5c/9f/515c9fed97cae11803dfa0a408cf9749.jpg",
+  "Дизель","АКПП",5,"Флагман сегменту economy. Великий багажник 590 л, комфортний крейсерський хід."));
+S.add(new EconomyCar("E4","Toyota Corolla",2022,2000,
+  "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80",
+  "Гібрид","АКПП",5,"Гібридна силова установка 1.8 Hybrid. Витрата 3.8 л/100 км у місті. Японська надійність."));
+S.add(new LuxuryCar("L1","BMW 5 Series",2023,2500,
+  "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80",
+  "Бензин","АКПП",5,"Бізнес-клас від BMW. Двигун 2.0 TwinPower 190 к.с., повний привід xDrive, масажні сидіння."));
+S.add(new LuxuryCar("L2","Mercedes E-Class",2023,3000,
+  "https://i.pinimg.com/1200x/44/14/65/4414658a8c805f2bc3e4f9992f960e2c.jpg",
+  "Дизель","АКПП",5,"Представницький седан. Система MBUX з голосовим управлінням, панорамний дах, AMG-пакет."));
+S.add(new LuxuryCar("L3","Audi A6",2022,2600,
+  "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80",
+  "Бензин","АКПП",5,"Спортивний бізнес-седан. Matrix LED, Quattro повний привід, цифрова панель приладів."));
+S.add(new LuxuryCar("L4","Porsche Cayenne",2023,2000,
+  "https://i.pinimg.com/736x/51/a9/ff/51a9ff8a4ffdd902d6b1cd0b1ea45722.jpg",
+  "Бензин","АКПП",5,"Преміальний позашляховик. Sport Chrono пакет, пневмопідвіска, 340 к.с. від 0 до 100 за 5.9 с."));
+S.add(new TruckCar("T1","SCANIA",2021,4000,
+  "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80",
+  "Дизель","МКПП",3,"Надійна вантажівка для міських перевезень. Вантажопідйомність 1.5 т, борт 3.5×2 м.",1.5));
+S.add(new TruckCar("T2","MAN TGX 18.480",2020,5000,
+  "https://i.pinimg.com/736x/59/93/7f/59937f903bf62b801476aa373c811398.jpg",
+  "Дизель","АКПП",2,"Магістральний тягач. Двигун 480 к.с., ретардер, круїз-контроль, місце для відпочинку в кабіні.",18));
+
+/* ════════════════════
+   STATE
+════════════════════ */
+let selectedId = null;
+let retId      = null;
+let detailId   = null;
+
+// Вибране — LocalStorage
+let favourites = JSON.parse(localStorage.getItem("autorent_favs") || "[]");
+
+// Кошик-замовлення — LocalStorage
+let savedOrder = JSON.parse(localStorage.getItem("autorent_order") || "null");
+
+/* ════════════════════
+   BOM: setInterval — дата та час у хедері
+════════════════════ */
+function updateClock() {
+  const now = new Date();
+  const d = now.toLocaleDateString("uk-UA", { day:"2-digit", month:"2-digit", year:"numeric" });
+  const t = now.toLocaleTimeString("uk-UA");
+  document.getElementById("hdr-clock").textContent = `📅 ${d}  ⏰ ${t}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ════════════════════
+   BOM: Navigator — інфо про браузер
+════════════════════ */
+function fillNavigatorInfo() {
+  const navRows = [
+    ["Браузер (userAgent)", navigator.userAgent.split(")")[0].split("(")[1] || navigator.userAgent.substring(0,60)+"..."],
+    ["Платформа",           navigator.platform],
+    ["Мова браузера",       navigator.language],
+    ["Мови",                (navigator.languages || []).slice(0,3).join(", ")],
+    ["Онлайн",              navigator.onLine ? "✅ Так" : "❌ Ні"],
+    ["Cookie увімкнено",    navigator.cookieEnabled ? "✅ Так" : "❌ Ні"],
+    ["CPU ядра",            navigator.hardwareConcurrency || "невідомо"],
+  ];
+  document.getElementById("nav-info").innerHTML =
+    navRows.map(([k,v]) =>
+      `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${v}</span></div>`
+    ).join("");
+
+  const scrRows = [
+    ["Роздільність",    `${screen.width} × ${screen.height} px`],
+    ["Доступна область",`${screen.availWidth} × ${screen.availHeight} px`],
+    ["Глибина кольору", `${screen.colorDepth} біт`],
+    ["Орієнтація",      screen.orientation ? screen.orientation.type : "невідомо"],
+    ["devicePixelRatio",window.devicePixelRatio || 1],
+    ["Вікно браузера",  `${window.innerWidth} × ${window.innerHeight} px`],
+  ];
+  document.getElementById("screen-info").innerHTML =
+    scrRows.map(([k,v]) =>
+      `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${v}</span></div>`
+    ).join("");
+}
+
+/* ════════════════════
+   ICONS
+════════════════════ */
+const ICON = {
+  fuel:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 22V8l6-6h6l2 2v4h2a1 1 0 011 1v9"/><rect x="3" y="14" width="10" height="8" rx="1"/></svg>`,
+  gear:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>`,
+  seat:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H5v3h2v6h2v-3h6v3h2v-6h2v-3h1.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>`,
+  year:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+  heart:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>`,
+};
+
+/* ════════════════════
+   STATS
+════════════════════ */
+function renderStats() {
+  const s = S.stats();
+  document.getElementById("s-total").textContent  = s.total;
+  document.getElementById("s-free").textContent   = s.free;
+  document.getElementById("s-busy").textContent   = s.busy;
+  document.getElementById("s-rents").textContent  = s.rents;
+  document.getElementById("s-rev").textContent    = s.rev.toLocaleString("uk-UA");
+  document.getElementById("hs-total").textContent = s.total;
+  document.getElementById("hs-free").textContent  = s.free;
+}
+
+/* ════════════════════
+   BUILD CAR CARD HTML (insertAdjacentHTML / DOM Manipulation)
+════════════════════ */
+function buildCardHTML(c) {
+  const tCls = c.getType() === "economy" ? "tag-eco"
+             : c.getType() === "luxury"  ? "tag-lux" : "tag-trk";
+  const extra = c instanceof TruckCar ? `<span class="sp">🚛 ${c.cargo}т</span>` : "";
+  const isFav = favourites.includes(c.id);
+  const foot  = c.isAvailable
+    ? `<button class="btn-rent" data-rent="${c.id}">Орендувати</button>`
+    : `<button class="btn-ret"  data-ret="${c.id}" data-model="${c.model}" data-photo="${c.photo}">Повернути</button>`;
+  return `
+  <div class="ccard" data-detail="${c.id}">
+    <div class="ccard-img">
+      <img src="${c.photo}" alt="${c.model}" loading="lazy"/>
+      <span class="tag ${tCls}">${c.getTypeName()}</span>
+      <span class="avail-badge ${c.isAvailable ? 'ab-free' : 'ab-busy'}">${c.isAvailable ? "Вільне" : "Зайнято"}</span>
+      <div class="price-corner">
+        <div class="price-big">${c.pricePerDay.toLocaleString("uk-UA")} грн</div>
+        <div class="price-sm">за добу</div>
+      </div>
+      <button class="fav-btn ${isFav ? 'active' : ''}" data-fav="${c.id}" title="До вибраного">${ICON.heart}</button>
+    </div>
+    <div class="ccard-body">
+      <div class="ccard-model">${c.model}</div>
+      <div class="ccard-sub">ID: ${c.id} &nbsp;·&nbsp; ${c.year} р.</div>
+      <div class="specs">
+        <span class="sp">${ICON.year} ${c.year}</span>
+        <span class="sp">${ICON.fuel} ${c.fuel}</span>
+        <span class="sp">${ICON.gear} ${c.transmission}</span>
+        <span class="sp">${ICON.seat} ${c.seats} місць</span>
+        ${extra}
+      </div>
+      <div class="ccard-div"></div>
+      <div class="ccard-footer">${foot}</div>
+    </div>
+  </div>`;
+}
+
+/* ════════════════════
+   RENDER CARS — forEach + insertAdjacentHTML
+════════════════════ */
+function renderCars(list) {
+  const grid = document.getElementById("cars-grid");
+  document.getElementById("cars-count").textContent = `Показано: ${list.length} авто`;
+  grid.innerHTML = "";
+  if (!list.length) {
+    grid.innerHTML = `<div class="no-cars">🔍 Нічого не знайдено — спробуйте інші фільтри</div>`;
+    return;
+  }
+  // DOM Manipulation: forEach + insertAdjacentHTML
+  list.forEach(c => {
+    grid.insertAdjacentHTML("beforeend", buildCardHTML(c));
+  });
+}
+
+/* ════════════════════
+   EVENT DELEGATION — один обробник на весь грід
+   (Вибране + Оренда + Повернення + Деталі)
+════════════════════ */
+document.getElementById("cars-grid").addEventListener("click", function(e) {
+  const favBtn  = e.target.closest("[data-fav]");
+  const rentBtn = e.target.closest("[data-rent]");
+  const retBtn  = e.target.closest("[data-ret]");
+  const card    = e.target.closest("[data-detail]");
+
+  // 1. Вибране (event.target delegation)
+  if (favBtn) {
+    e.stopPropagation();
+    toggleFav(favBtn.dataset.fav);
+    favBtn.classList.toggle("active", favourites.includes(favBtn.dataset.fav));
+    renderFavStrip();
+    updateFavCount();
+    return;
+  }
+  // 2. Орендувати
+  if (rentBtn) { e.stopPropagation(); jumpRent(rentBtn.dataset.rent); return; }
+  // 3. Повернути
+  if (retBtn)  { e.stopPropagation(); openRet(retBtn.dataset.ret, retBtn.dataset.model, retBtn.dataset.photo); return; }
+  // 4. Детальна картка (mouseover ловиться нижче, click тут)
+  if (card)    { openDetail(card.dataset.detail); }
+});
+
+// event: mouseover на картці
+document.getElementById("cars-grid").addEventListener("mouseover", function(e) {
+  const card = e.target.closest(".ccard");
+  if (card) card.style.borderColor = "#bbb";
+});
+document.getElementById("cars-grid").addEventListener("mouseout", function(e) {
+  const card = e.target.closest(".ccard");
+  if (card) card.style.borderColor = "";
+});
+
+/* ════════════════════
+   LIVE SEARCH — filter() + includes()
+════════════════════ */
+function liveSearch() {
+  const q = document.getElementById("search-inp").value.toLowerCase().trim();
+  const type  = document.getElementById("f-type").value;
+  const avail = document.getElementById("f-avail").value;
+  let list = S.all(type || null, avail === "free");
+  if (q) {
+    list = list.filter(c =>
+      c.model.toLowerCase().includes(q) ||
+      c.fuel.toLowerCase().includes(q)  ||
+      c.getTypeName().toLowerCase().includes(q)
+    );
+  }
+  renderCars(list);
+}
+
+/* ════════════════════
+   FILTERS
+════════════════════ */
+function applyFilters() {
+  const q     = document.getElementById("search-inp").value.toLowerCase().trim();
+  const type  = document.getElementById("f-type").value;
+  const avail = document.getElementById("f-avail").value;
+  const sort  = document.getElementById("f-sort").value;
+  let list = S.all(type || null, avail === "free");
+  if (q) list = list.filter(c => c.model.toLowerCase().includes(q));
+  if (sort === "asc")  list = [...list].sort((a,b) => a.pricePerDay - b.pricePerDay);
+  if (sort === "desc") list = [...list].sort((a,b) => b.pricePerDay - a.pricePerDay);
+  if (sort === "year") list = [...list].sort((a,b) => b.year - a.year);
+  renderCars(list);
+}
+
+function qFilter(f, btn) {
+  document.querySelectorAll(".qf").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+  document.getElementById("search-inp").value = "";
+  if (f === "free")    renderCars(S.all(null, true));
+  else if (f === "all")renderCars(S.all());
+  else                 renderCars(S.all(f));
+}
+
+/* ════════════════════
+   NAVIGATION (SPA)
+════════════════════ */
+function goTo(name, btn) {
+  document.querySelectorAll(".sec").forEach(s => s.classList.remove("on"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("on"));
+  document.getElementById(`sec-${name}`).classList.add("on");
+  // mark active btn
+  if (btn) {
+    btn.classList.add("on");
+  } else {
+    const map = { cars:0, rent:1, history:2, favourites:3, about:4 };
+    const idx = map[name];
+    if (idx !== undefined) document.querySelectorAll(".nav-btn")[idx].classList.add("on");
+  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (name === "rent")       { renderPickList(); calcPrice(); restoreOrder(); }
+  if (name === "history")    renderHistory();
+  if (name === "cars")       { renderStats(); renderCars(S.all()); renderFavStrip(); }
+  if (name === "favourites") renderFavPage();
+  if (name === "about")      fillNavigatorInfo();
+}
+
+/* ════════════════════
+   FAVOURITES (LocalStorage)
+════════════════════ */
+function toggleFav(id) {
+  if (favourites.includes(id)) {
+    favourites = favourites.filter(f => f !== id);
+  } else {
+    favourites.push(id);
+  }
+  // LocalStorage — зберігаємо вибране
+  localStorage.setItem("autorent_favs", JSON.stringify(favourites));
+}
+
+function updateFavCount() {
+  const cnt = document.getElementById("fav-cnt");
+  cnt.textContent = favourites.length ? `(${favourites.length})` : "";
+}
+
+function renderFavStrip() {
+  const strip = document.getElementById("fav-strip");
+  const list  = document.getElementById("fav-list");
+  if (!favourites.length) { strip.classList.remove("vis"); return; }
+  strip.classList.add("vis");
+  list.innerHTML = favourites.map(id => {
+    const car = S.find(id);
+    if (!car) return "";
+    return `<div class="fav-tag">
+      <span>${car.model}</span>
+      <button class="fav-remove" onclick="removeFav('${id}')" title="Видалити">✕</button>
+    </div>`;
+  }).join("");
+}
+
+function removeFav(id) {
+  favourites = favourites.filter(f => f !== id);
+  localStorage.setItem("autorent_favs", JSON.stringify(favourites));
+  renderFavStrip(); updateFavCount(); renderCars(S.all());
+}
+
+function clearFavs() {
+  favourites = [];
+  localStorage.setItem("autorent_favs", JSON.stringify(favourites));
+  renderFavStrip(); updateFavCount(); renderCars(S.all());
+  if (document.getElementById("sec-favourites").classList.contains("on")) renderFavPage();
+}
+
+function renderFavPage() {
+  const grid = document.getElementById("fav-grid");
+  const sub  = document.getElementById("fav-page-sub");
+  const cars = favourites.map(id => S.find(id)).filter(Boolean);
+  sub.textContent = `Збережено: ${cars.length} авто`;
+  grid.innerHTML = "";
+  if (!cars.length) { grid.innerHTML = `<div class="no-cars">❤️ Вибране порожнє — натисніть ♥ на картці авто</div>`; return; }
+  cars.forEach(c => grid.insertAdjacentHTML("beforeend", buildCardHTML(c)));
+  // delegation for fav-grid too
+  grid.onclick = function(e) {
+    const favBtn  = e.target.closest("[data-fav]");
+    const rentBtn = e.target.closest("[data-rent]");
+    const card    = e.target.closest("[data-detail]");
+    if (favBtn)  { e.stopPropagation(); toggleFav(favBtn.dataset.fav); favBtn.classList.toggle("active", favourites.includes(favBtn.dataset.fav)); renderFavStrip(); updateFavCount(); return; }
+    if (rentBtn) { e.stopPropagation(); jumpRent(rentBtn.dataset.rent); return; }
+    if (card)    { openDetail(card.dataset.detail); }
+  };
+}
+
+/* ════════════════════
+   DETAIL MODAL (click on card)
+════════════════════ */
+function openDetail(id) {
+  const car = S.find(id);
+  if (!car) return;
+  detailId = id;
+  document.getElementById("dm-title").textContent = car.model;
+  document.getElementById("dm-img").src           = car.photo;
+  document.getElementById("dm-img").alt           = car.model;
+  document.getElementById("dm-name").textContent  = car.model;
+  document.getElementById("dm-sub").textContent   = `${car.year} р. · ${car.getTypeName()} · ID: ${car.id}`;
+  document.getElementById("dm-price").textContent = car.pricePerDay.toLocaleString("uk-UA") + " грн";
+  document.getElementById("dm-desc").textContent  = car.description;
+  const extra = car instanceof TruckCar ? `<span class="sp">🚛 ${car.cargo}т вантаж</span>` : "";
+  document.getElementById("dm-specs").innerHTML   = `
+    <span class="sp">${ICON.year} ${car.year}</span>
+    <span class="sp">${ICON.fuel} ${car.fuel}</span>
+    <span class="sp">${ICON.gear} ${car.transmission}</span>
+    <span class="sp">${ICON.seat} ${car.seats} місць</span>
+    ${extra}
+    <span class="sp">${car.isAvailable ? "✅ Вільне" : "❌ Зайнято"}</span>`;
+  const rentBtn = document.getElementById("dm-rent-btn");
+  if (car.isAvailable) {
+    rentBtn.disabled = false;
+    rentBtn.textContent = "Орендувати";
+    rentBtn.onclick = () => { closeDetail(); jumpRent(id); };
+  } else {
+    rentBtn.disabled = false;
+    rentBtn.textContent = "Повернути";
+    rentBtn.onclick = () => { closeDetail(); openRet(id, car.model, car.photo); };
+  }
+  document.getElementById("detail-overlay").classList.add("open");
+}
+function closeDetail() { document.getElementById("detail-overlay").classList.remove("open"); }
+
+/* ════════════════════
+   RENT SECTION
+════════════════════ */
+function jumpRent(id) {
+  document.querySelectorAll(".sec").forEach(s => s.classList.remove("on"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("on"));
+  document.getElementById("sec-rent").classList.add("on");
+  document.querySelectorAll(".nav-btn")[1].classList.add("on");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  renderPickList();
+  setTimeout(() => {
+    pickCar(id);
+    const el = document.getElementById(`pi-${id}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 80);
+}
+
+function renderPickList() {
+  const list = document.getElementById("pick-list");
+  list.innerHTML = S.all().map(c => {
+    const cls = c.isAvailable ? "pick-item" : "pick-item na";
+    const lbl = c.getType() === "economy" ? "🟢 Economy"
+              : c.getType() === "luxury"  ? "🟡 Luxury" : "🔵 Truck";
+    const sel = c.id === selectedId ? " chosen" : "";
+    return `
+    <div class="${cls}${sel}" id="pi-${c.id}" onclick="pickCar('${c.id}')">
+      <div class="pick-thumb"><img src="${c.photo}" alt="${c.model}"/></div>
+      <div class="pick-info">
+        <div class="pick-model">${c.model} (${c.year})</div>
+        <div class="pick-meta">${lbl} · ${c.fuel} · ${c.transmission}</div>
+        <div class="pick-price">${c.pricePerDay.toLocaleString("uk-UA")} грн/день</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function pickCar(id) {
+  selectedId = id;
+  document.querySelectorAll(".pick-item").forEach(e => e.classList.remove("chosen"));
+  const el = document.getElementById(`pi-${id}`);
+  if (el) el.classList.add("chosen");
+  calcPrice();
+  saveOrder();
+}
+
+function calcPrice() {
+  const days  = parseInt(document.getElementById("r-days").value) || 0;
+  const v = document.getElementById("pb-val");
+  const n = document.getElementById("pb-note");
+  if (!selectedId || days < 1) {
+    v.textContent = "— грн";
+    n.textContent = "Оберіть автомобіль зі списку праворуч";
+    return;
+  }
+  const car = S.find(selectedId);
+  if (!car) return;
+  v.textContent = car.calculatePrice(days).toLocaleString("uk-UA") + " грн";
+  n.textContent = car.getPriceNote(days);
+}
+
+/* ════════════════════
+   VALIDATION (phone regex, preventDefault)
+════════════════════ */
+function validatePhone(inp) {
+  const phone = inp.value.trim();
+  const regex = /^\+?3?8?(0\d{9})$/;
+  const clean = phone.replace(/[\s\-\(\)]/g, "");
+  const ok = regex.test(clean) || clean.length === 0;
+  inp.classList.toggle("err", !ok && clean.length > 0);
+  document.getElementById("err-phone").classList.toggle("vis", !ok && clean.length > 0);
+}
+
+function doRent(e) {
+  // preventDefault — зупиняємо стандартну відправку форми
+  e.preventDefault();
+
+  const name  = document.getElementById("r-name").value.trim();
+  const phone = document.getElementById("r-phone").value.trim().replace(/[\s\-\(\)]/g, "");
+  const email = document.getElementById("r-email").value.trim();
+  const days  = parseInt(document.getElementById("r-days").value);
+
+  let valid = true;
+
+  // валідація: ім'я
+  const errName = document.getElementById("err-name");
+  if (!name || name.split(" ").filter(Boolean).length < 2) {
+    document.getElementById("r-name").classList.add("err");
+    errName.classList.add("vis"); valid = false;
+  } else {
+    document.getElementById("r-name").classList.remove("err");
+    errName.classList.remove("vis");
+  }
+
+  // валідація: телефон (regex)
+  const phoneRegex = /^\+?3?8?(0\d{9})$/;
+  const errPhone = document.getElementById("err-phone");
+  if (!phoneRegex.test(phone)) {
+    document.getElementById("r-phone").classList.add("err");
+    errPhone.classList.add("vis"); valid = false;
+  } else {
+    document.getElementById("r-phone").classList.remove("err");
+    errPhone.classList.remove("vis");
+  }
+
+  // валідація: email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const errEmail = document.getElementById("err-email");
+  if (email && !emailRegex.test(email)) {
+    document.getElementById("r-email").classList.add("err");
+    errEmail.classList.add("vis"); valid = false;
+  } else {
+    document.getElementById("r-email").classList.remove("err");
+    errEmail.classList.remove("vis");
+  }
+
+  if (!selectedId)    { toast("Оберіть автомобіль зі списку праворуч", "err"); return; }
+  if (!days || days < 1){ toast("Введіть кількість днів", "err"); return; }
+  if (!valid)           { toast("Виправте помилки у формі", "err"); return; }
+
+  const cust = new Customer(name, phone, email);
+  const res  = S.rent(selectedId, cust, days);
+
+  if (res.ok) {
+    toast(`✅ ${res.msg}  Сума: ${res.price.toLocaleString("uk-UA")} грн`, "ok");
+    ["r-name","r-phone","r-email"].forEach(id => document.getElementById(id).value = "");
+    selectedId = null;
+    localStorage.removeItem("autorent_order");
+    renderPickList(); renderStats(); calcPrice();
+  } else {
+    toast(res.msg, "err");
+  }
+}
+
+/* ════════════════════
+   LocalStorage — збереження вибору авто
+════════════════════ */
+function saveOrder() {
+  const order = {
+    carId: selectedId,
+    name:  document.getElementById("r-name").value,
+    phone: document.getElementById("r-phone").value,
+    email: document.getElementById("r-email").value,
+    days:  document.getElementById("r-days").value
+  };
+  localStorage.setItem("autorent_order", JSON.stringify(order));
+}
+
+function restoreOrder() {
+  const order = JSON.parse(localStorage.getItem("autorent_order") || "null");
+  if (!order) return;
+  if (order.name)  document.getElementById("r-name").value  = order.name;
+  if (order.phone) document.getElementById("r-phone").value = order.phone;
+  if (order.email) document.getElementById("r-email").value = order.email;
+  if (order.days)  document.getElementById("r-days").value  = order.days;
+  if (order.carId) {
+    selectedId = order.carId;
+    setTimeout(() => {
+      const el = document.getElementById(`pi-${order.carId}`);
+      if (el) el.classList.add("chosen");
+      calcPrice();
+    }, 50);
+  }
+}
+
+/* ════════════════════
+   RETURN
+════════════════════ */
+function openRet(id, model, photo) {
+  retId = id;
+  document.getElementById("ret-name").textContent = model;
+  document.getElementById("ret-id").textContent   = "ID: " + id;
+  document.getElementById("ret-img").src           = photo;
+  document.getElementById("ret-overlay").classList.add("open");
+}
+function closeRet() { retId = null; document.getElementById("ret-overlay").classList.remove("open"); }
+function confirmRet() {
+  if (!retId) return;
+  const res = S.returnCar(retId);
+  if (res.ok) {
+    toast("✅ " + res.msg, "ok");
+    closeRet(); renderStats(); renderCars(S.all()); renderPickList();
+  } else toast(res.msg, "err");
+}
+
+/* ════════════════════
+   HISTORY + Advanced stats (reduce, map)
+════════════════════ */
+function renderHistory() {
+  const body = document.getElementById("hist-body");
+  const sub  = document.getElementById("hist-sub");
+  const sumEl= document.getElementById("stats-summary");
+  const log  = S.log;
+  sub.textContent = `Всього записів: ${log.length}`;
+
+  if (!log.length) {
+    body.innerHTML = `<tr class="empty-msg"><td colspan="8">📋 Журнал порожній — зробіть першу оренду!</td></tr>`;
+    sumEl.style.display = "none";
+    return;
+  }
+
+  body.innerHTML = [...log].reverse().map(r => {
+    const chip = r.type === "Economy"
+      ? `<span class="td-chip chip-eco">Economy</span>`
+      : r.type === "Luxury"
+        ? `<span class="td-chip chip-lux">Luxury</span>`
+        : `<span class="td-chip chip-trk">Truck</span>`;
+    return `<tr>
+      <td class="td-muted">#${r.n}</td>
+      <td class="td-bold">${r.model}</td>
+      <td>${chip}</td>
+      <td>${r.customer.name}</td>
+      <td class="td-muted">${r.customer.phone}</td>
+      <td class="td-muted">${r.days} дн.</td>
+      <td class="td-green">${r.price.toLocaleString("uk-UA")} грн</td>
+      <td class="td-muted">${r.date}</td>
+    </tr>`;
+  }).join("");
+
+  // Advanced stats: reduce() + map()
+  const totalRev  = log.reduce((sum, r) => sum + r.price, 0);
+  const totalDays = log.reduce((sum, r) => sum + r.days, 0);
+  const avgPrice  = Math.round(totalRev / log.length);
+
+  // map() — рахуємо кількість оренд по класах
+  const byType = log.reduce((acc, r) => { acc[r.type] = (acc[r.type] || 0) + 1; return acc; }, {});
+  const typeStr = Object.entries(byType).map(([t,n]) => `${t}: ${n}`).join(" · ");
+
+  sumEl.style.display = "flex";
+  sumEl.innerHTML = `
+    <div class="ss-item">💰 Загальний дохід: <strong>${totalRev.toLocaleString("uk-UA")} грн</strong></div>
+    <div class="ss-item">📅 Всього днів оренди: <strong>${totalDays}</strong></div>
+    <div class="ss-item">📊 Середній чек: <strong>${avgPrice.toLocaleString("uk-UA")} грн</strong></div>
+    <div class="ss-item">🚗 По класах: <strong>${typeStr}</strong></div>
+  `;
+}
+
+/* ════════════════════
+   THEME TOGGLE (LocalStorage)
+════════════════════ */
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("autorent_theme", isDark ? "dark" : "light");
+  document.querySelector(".theme-btn").textContent = isDark ? "☀️" : "🌙";
+}
+
+// Відновлення теми
+if (localStorage.getItem("autorent_theme") === "dark") {
+  document.body.classList.add("dark");
+  document.querySelector(".theme-btn").textContent = "☀️";
+}
+
+/* ════════════════════
+   UTILS
+════════════════════ */
+function scrollTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+
+let _tt = null;
+function toast(msg, type = "ok") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  if (_tt) clearTimeout(_tt);
+  _tt = setTimeout(() => { el.className = "toast"; }, 3600);
+}
+
+/* ════════════════════
+   INIT
+════════════════════ */
+renderStats();
+renderCars(S.all());
+updateFavCount();
+renderFavStrip();
+
+// event: input — live search autostart for already typed query
+document.getElementById("r-days").addEventListener("input", () => { calcPrice(); saveOrder(); });
+document.getElementById("r-name").addEventListener("input",  saveOrder);
+document.getElementById("r-phone").addEventListener("input", saveOrder);
+document.getElementById("r-email").addEventListener("input", saveOrder);
+</script>
+</body>
+</html>
